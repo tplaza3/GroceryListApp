@@ -1,0 +1,7 @@
+{
+  "name": "groceryListApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
