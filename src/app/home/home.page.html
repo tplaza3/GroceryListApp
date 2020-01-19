@@ -1,14 +1,36 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Ionic Blank
+      Grocery List
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="ion-padding">
-    The world is your oyster.
-    <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
-  </div>
+  <ion-card>
+    <ion-item>
+      <ion-label>Item</ion-label>
+      <ion-label text-center>Amount</ion-label>
+      <ion-label text-end>{{isEditing ? "Delete Item?" : "Done?"}}</ion-label>
+    </ion-item>
+  </ion-card>
+  <ion-card *ngFor="let item of groceryItems; let i = index">
+    <ion-item id="grocery-item-{{i}}">
+      <ion-input placeholder="{{item.name}} "type="text" clearInput></ion-input>
+      <ion-input placeholder="{{item.amount}} "type="number" min="0"></ion-input>
+      <ion-checkbox color="dark" checked="{{item.isDone}}"></ion-checkbox>
+    </ion-item>
+  </ion-card>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar class="align-right">
+      <div *ngIf="!isEditing">
+        <ion-button size="large" fill="outline" (click)="deleteItem()">Edit List</ion-button>
+        <ion-button size="large" (click)="addItem()">Add Item</ion-button>
+      </div>
+      <div *ngIf="isEditing">
+        <ion-button size="large" (click)="updateItem()">Update List</ion-button>
+      </div>
+  </ion-toolbar>
+</ion-footer>
