@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { GroceryItem } from '../../models/grocery-item';
+import { ApiService } from '../../services/ApiService';
 
 @Component({
   selector: 'app-home',
@@ -8,23 +9,15 @@ import { GroceryItem } from '../../models/grocery-item';
 })
 export class HomePage {
 
-  ITEMS = [
-    {
-      name: 'Apples',
-      amount: 1,
-      isDone: false
-    },
-    {
-      name: 'Bananas',
-      amount: 2,
-      isDone: true
-    }
-  ];
-  groceryItems: GroceryItem[] = [];
+  groceryItems: GroceryItem[];
   isEditing = false;
 
-  constructor() {
-    this.groceryItems = this.ITEMS;
+  constructor(private apiService: ApiService) {
+
+  }
+
+  ionViewWillEnter() {
+    this.setGroceryItems();
   }
 
   addItem() {
@@ -34,7 +27,13 @@ export class HomePage {
       amount: 1,
       isDone: false
     };
-    this.groceryItems.push(item);
+    this.apiService.addGroceryItem(item).subscribe((data) => {
+      console.log('success ', JSON.stringify(data));
+      this.setGroceryItems();
+    }, error => {
+      console.error(error);
+    });
+
   }
   updateItem() {
     console.log('Updating grocery item');
@@ -43,5 +42,14 @@ export class HomePage {
   deleteItem() {
     console.log('Deleting grocery item');
     this.isEditing = true;
+  }
+
+  setGroceryItems() {
+    this.apiService.getGroceryItems().subscribe((data: GroceryItem[]) => {
+      console.log(JSON.stringify(data));
+      this.groceryItems = data;
+    }, error => {
+      console.error(error);
+    });
   }
 }

@@ -8,16 +8,16 @@
 
 <ion-content>
   <ion-card>
-    <ion-item>
-      <ion-label>Item</ion-label>
+    <ion-item class="text-underline">
+      <ion-label >Item</ion-label>
       <ion-label text-center>Amount</ion-label>
       <ion-label text-end>{{isEditing ? "Delete Item?" : "Done?"}}</ion-label>
     </ion-item>
   </ion-card>
   <ion-card *ngFor="let item of groceryItems; let i = index">
     <ion-item id="grocery-item-{{i}}">
-      <ion-input placeholder="{{item.name}} "type="text" clearInput></ion-input>
-      <ion-input placeholder="{{item.amount}} "type="number" min="0"></ion-input>
+      <ion-input type="text" clearInput>{{item.name}}</ion-input>
+      <ion-input type="number" min="0">{{item.amount}}</ion-input>
       <ion-checkbox color="dark" checked="{{item.isDone}}"></ion-checkbox>
     </ion-item>
   </ion-card>
