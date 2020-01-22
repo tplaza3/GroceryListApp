@@ -1,6 +1,10 @@
-import { Component } from '@angular/core';
-import { GroceryItem } from '../../models/grocery-item';
-import { ApiService } from '../../services/ApiService';
+import { Component, OnInit } from '@angular/core';
+import { GroceryItem } from '../store/models/grocery-item';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/models/app-state';
+import { AddItemAction, DeleteItemAction, LoadGroceryListAction, UpdateItemAction } from '../store/actions/grocery-list.actions';
+import { v4 as uuid } from 'uuid';
 
 @Component({
   selector: 'app-home',
@@ -9,47 +13,54 @@ import { ApiService } from '../../services/ApiService';
 })
 export class HomePage {
 
-  groceryItems: GroceryItem[];
-  isEditing = false;
+  groceryItems: Observable<Array<GroceryItem>>;
+  loading$: Observable<boolean>;
+  error$: Observable<Error>;
+  newItem: GroceryItem = {
+    id: null,
+    name: '',
+    amount: null,
+    isDone: false
+  };
+  emptyList: boolean;
+  name: string;
+  amount: number;
+  isDone: boolean;
 
-  constructor(private apiService: ApiService) {
-
-  }
+  constructor(private store: Store<AppState>) {}
 
   ionViewWillEnter() {
-    this.setGroceryItems();
+    this.groceryItems = this.store.select(store => store.groceryList.list);
+    this.loading$ = this.store.select(store => store.groceryList.loading);
+    this.error$ = this.store.select(store => store.groceryList.error);
+
+    // check for empty list to display initial message to user
+    this.groceryItems.subscribe((data) => {
+      this.emptyList = (data.length === 0);
+    });
+    this.store.dispatch(new LoadGroceryListAction());
   }
 
   addItem() {
     console.log('Adding grocery item');
-    const item = {
-      name: 'New Item',
-      amount: 1,
+    this.newItem.id = uuid();
+    console.log(this.newItem.id);
+    this.store.dispatch(new AddItemAction(this.newItem));
+    this.newItem = {
+      id: null,
+      name: '',
+      amount: null,
       isDone: false
     };
-    this.apiService.addGroceryItem(item).subscribe((data) => {
-      console.log('success ', JSON.stringify(data));
-      this.setGroceryItems();
-    }, error => {
-      console.error(error);
-    });
-
   }
-  updateItem() {
+  updateItem(item: GroceryItem) {
     console.log('Updating grocery item');
-    this.isEditing = false;
+    console.log(JSON.stringify(item));
+    this.store.dispatch(new UpdateItemAction(item));
   }
-  deleteItem() {
-    console.log('Deleting grocery item');
-    this.isEditing = true;
+  deleteItem(id: string) {
+    console.log('Deleting grocery item ' + id);
+    this.store.dispatch(new DeleteItemAction(id));
   }
 
-  setGroceryItems() {
-    this.apiService.getGroceryItems().subscribe((data: GroceryItem[]) => {
-      console.log(JSON.stringify(data));
-      this.groceryItems = data;
-    }, error => {
-      console.error(error);
-    });
-  }
 }

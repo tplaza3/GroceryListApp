@@ -10,11 +10,23 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ApiService } from '../services/ApiService';
+import { StoreModule } from '@ngrx/store';
+import { GroceryListReducer } from './store/reducers/grocery-list.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { GroceryListEffects } from './store/effects/grocery-list.effects';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    HttpClientModule,
+    StoreModule.forRoot({
+      groceryList: GroceryListReducer
+    }),
+    EffectsModule.forRoot([GroceryListEffects])],
   providers: [
     StatusBar,
     SplashScreen,

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GroceryItem } from '../models/grocery-item';
+import { GroceryItem } from '../app/store/models/grocery-item';
 
 @Injectable()
 export class ApiService {
@@ -24,7 +24,7 @@ export class ApiService {
     updateGroceryItem(item: GroceryItem) {
         return this.http.put(this.HOST + this.BASE_URL + this.ITEMS_URL, item, this.OPTIONS);
     }
-    deleteGroceryItem(item: GroceryItem) {
-        return this.http.delete(this.HOST + this.BASE_URL + this.ITEMS_URL + '/' + item.id, this.OPTIONS);
+    deleteGroceryItem(id: string) {
+        return this.http.delete(this.HOST + this.BASE_URL + this.ITEMS_URL + '/' + id, this.OPTIONS);
     }
 }
