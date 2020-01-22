@@ -7,30 +7,40 @@
 </ion-header>
 
 <ion-content>
-  <ion-card>
+  <ion-card *ngIf="emptyList" color="primary">
+    <ion-card-header>
+      Please add some items to your grocery list! <br><br>
+      Enter an item name and amount below. <br><br>
+      Click ADD ITEM.
+    </ion-card-header>
+  </ion-card>
+  <ion-card *ngFor="let item of groceryItems | async">
+    <div>{{item.id}}</div>
     <ion-item>
-      <ion-label>Item</ion-label>
-      <ion-label text-center>Amount</ion-label>
-      <ion-label text-end>{{isEditing ? "Delete Item?" : "Done?"}}</ion-label>
+      <ion-label position="fixed">Name:</ion-label>
+      <ion-input type="text" (ionChange)="updateItem(item)" debounce="350">{{item.name}}</ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="fixed">Amount:</ion-label>
+      <ion-input type="number" min="0" (ionChange)="updateItem(item)" debounce="100">{{item.amount}}</ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="fixed">Done?</ion-label>
+      <ion-checkbox color="dark" (ionChange)="updateItem(item) "checked="{{item.isDone}}" ></ion-checkbox>
+    </ion-item>
+    <ion-item class="ion-text-end">
+      <ion-button color="danger" (click)="deleteItem(item.id)">Delete Item</ion-button>
     </ion-item>
   </ion-card>
-  <ion-card *ngFor="let item of groceryItems; let i = index">
-    <ion-item id="grocery-item-{{i}}">
-      <ion-input placeholder="{{item.name}} "type="text" clearInput></ion-input>
-      <ion-input placeholder="{{item.amount}} "type="number" min="0"></ion-input>
-      <ion-checkbox color="dark" checked="{{item.isDone}}"></ion-checkbox>
-    </ion-item>
-  </ion-card>
+  <div></div>
 </ion-content>
 
 <ion-footer>
   <ion-toolbar class="align-right">
-      <div *ngIf="!isEditing">
-        <ion-button size="large" fill="outline" (click)="deleteItem()">Edit List</ion-button>
-        <ion-button size="large" (click)="addItem()">Add Item</ion-button>
-      </div>
-      <div *ngIf="isEditing">
-        <ion-button size="large" (click)="updateItem()">Update List</ion-button>
-      </div>
+    <form (ngSubmit)="addItem()">
+      <input type="text" [(ngModel)]="newItem.name" placeholder="Name" name="itemName"/>
+      <input type="number" min="0" [(ngModel)]="newItem.amount" placeholder="Amount" name="itemAmount"/>
+      <ion-button size="large" type="submit()">Add Item</ion-button>
+    </form>
   </ion-toolbar>
 </ion-footer>
