@@ -20,12 +20,9 @@ export class HomePage {
     id: null,
     name: '',
     amount: null,
-    isDone: false
+    done: false
   };
   emptyList: boolean;
-  name: string;
-  amount: number;
-  isDone: boolean;
 
   constructor(private store: Store<AppState>) {}
 
@@ -50,12 +47,19 @@ export class HomePage {
       id: null,
       name: '',
       amount: null,
-      isDone: false
+      done: false
     };
   }
-  updateItem(item: GroceryItem) {
+  updateItem(item: GroceryItem, value: any, field: string) {
     console.log('Updating grocery item');
-    console.log(JSON.stringify(item));
+
+    if (field === 'name') {
+      item.name = value;
+    } else if (field === 'amount') {
+      item.amount = value;
+    } else if (field === 'done') {
+      item.done = value;
+    }
     this.store.dispatch(new UpdateItemAction(item));
   }
   deleteItem(id: string) {

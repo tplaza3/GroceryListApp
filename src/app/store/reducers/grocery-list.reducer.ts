@@ -74,7 +74,7 @@ export function GroceryListReducer(state: GroceryListState = initialState, actio
         case GroceryListActionTypes.UPDATE_ITEM_SUCCESS:
             return {
                 ...state,
-                list: [...state.list, action.payload],
+                list: [...state.list],
                 loading: false
             };
         case GroceryListActionTypes.UPDATE_ITEM_FAILURE:
