@@ -5,3 +5,6 @@ Start a local server that launches in your browser. It should automatically relo
 ```
 ionic serve
 ```
+
+### Running with Web Service
+Please use with Spring Boot Web Service started locally.
