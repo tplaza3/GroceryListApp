@@ -50,16 +50,8 @@ export class HomePage {
       done: false
     };
   }
-  updateItem(item: GroceryItem, value: any, field: string) {
+  updateItem(item: GroceryItem) {
     console.log('Updating grocery item');
-
-    if (field === 'name') {
-      item.name = value;
-    } else if (field === 'amount') {
-      item.amount = value;
-    } else if (field === 'done') {
-      item.done = value;
-    }
     this.store.dispatch(new UpdateItemAction(item));
   }
   deleteItem(id: string) {
