@@ -15,7 +15,7 @@
     </ion-card-header>
   </ion-card>
   <ion-card *ngFor="let item of groceryItems | async; let i = index;">
-    <div>{{item.id}}</div>
+<!--    <div>{{item.id}}</div>-->
     <ion-item>
       <ion-label position="fixed">Name:</ion-label>
       <ion-input type="text" debounce="350" [(ngModel)]="item.name" (ionChange)="updateItem(item, item.name, 'name')"></ion-input>
